@@ -7,7 +7,7 @@ User = get_user_model()
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200, null=False, blank=False,
-                            verbose_name='Название')
+                            verbose_name='Название ингридиента')
     measurement_unit = models.CharField(max_length=200, null=False,
                                         blank=False,
                                         verbose_name='Мера измерения')
@@ -16,16 +16,35 @@ class Ingredient(models.Model):
         ordering = ('name',)
         verbose_name = 'Ингридиент'
         verbose_name_plural = 'Ингридиенты'
+        constraints = [
+            models.UniqueConstraint(fields=['name', 'measurement_unit'],
+                                    name='unique ingredient')
+        ]
 
     def __str__(self):
         return self.name
 
 
 class Tag(models.Model):
+    ORANGE = '#FFA500'
+    YELLOW = '#FFFF00'
+    GREEN = '#008000'
+    BLUE = '#0000FF'
+    PURPLE = '#800080'
+
+    COLOR_CHOICES = [
+        (ORANGE, 'Оранжевый'),
+        (YELLOW, 'Желтый'),
+        (GREEN, 'Зеленый'),
+        (BLUE, 'Синий'),
+        (PURPLE, 'Фиолетовый'),
+    ]
+
     name = models.CharField(max_length=200, unique=True, null=False,
                             blank=False, verbose_name='Название')
     color = models.CharField(max_length=7, unique=True, null=False,
-                             blank=False, verbose_name='Цвет')
+                             blank=False, choices=COLOR_CHOICES,
+                             verbose_name='Цвет')
     slug = models.CharField(max_length=200, unique=True, null=False,
                             blank=False, verbose_name='Слаг')
 
@@ -50,8 +69,9 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(Ingredient,
                                          through='RecipeIngredients')
     cooking_time = models.PositiveIntegerField(
-                    validators=[MinValueValidator(1)],
-                    verbose_name='Время готовки')
+        validators=(MinValueValidator(
+            1, message='Минимальное время приготовления 1 минута')),
+        verbose_name='Время готовки')
     image = models.ImageField(upload_to='recipes/', blank=False, null=False,
                               verbose_name='Фото рецепта')
 
@@ -68,12 +88,18 @@ class RecipeIngredients(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.PROTECT,
                                    verbose_name='Ингридиент')
-    amount = models.PositiveIntegerField(validators=[MinValueValidator(1)],
-                                         verbose_name='Количество')
+    amount = models.PositiveIntegerField(validators=(MinValueValidator(
+        1, message='Минимальное количество ингридиентов 1')),
+        verbose_name='Количество')
 
     class Meta:
-        verbose_name = 'Ингридиенты'
-        verbose_name_plural = 'Ингридиенты'
+        ordering = ['-id']
+        verbose_name = 'Количество ингридиента'
+        verbose_name_plural = 'Количество ингридиентов'
+        constraints = [
+            models.UniqueConstraint(fields=['ingredient', 'recipe'],
+                                    name='unique ingredients recipe')
+        ]
 
     def __str__(self):
         return 'Ингридиент в рецепте'
@@ -102,7 +128,7 @@ class Favorite(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
-                       name='unique_recipe_in_user_favorite')]
+                                               name='unique_recipe_in_user_favorite')]
         ordering = ('-id',)
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
@@ -117,7 +143,7 @@ class ShoppingList(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
-                       name='unique_recipe_in_user_shopping_list')]
+                                               name='unique_recipe_in_user_shopping_list')]
         ordering = ('-id',)
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
