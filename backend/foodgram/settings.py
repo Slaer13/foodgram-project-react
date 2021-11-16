@@ -1,20 +1,14 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-if os.path.exists(dotenv_path):
-    load_dotenv(dotenv_path)
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY',
-                            default='django-insecure')
+SECRET_KEY = os.getenv('SECRET_KEY',
+                       default='django-insecure')
 
-DEBUG = int(os.environ.get('DEBUG', default=1))
+DEBUG = int(os.getenv('DEBUG', default=0))
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', default='*').split(' ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split(' ')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -64,13 +58,13 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('ENGINE',
-                                 default='django.db.backends.postgresql'),
-        'NAME': os.environ.get('DB_NAME', default='postgres'),
-        'USER': os.environ.get('DB_USER', default='postgres'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', default='postgres'),
-        'HOST': os.environ.get('DB_HOST', default='db'),
-        'PORT': os.environ.get('DB_PORT', default=5432)
+        'ENGINE': os.getenv('ENGINE',
+                            default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('DB_USER', default='postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST', default='db'),
+        'PORT': os.getenv('DB_PORT', default=5432)
     }
 }
 
@@ -121,17 +115,16 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-       'LOGIN_FIELD': 'email',
-       'SERIALIZERS': {
-           'user_create': 'users.serializers.UserRegistrationSerializer',
-           'user': 'users.serializers.CustomUserSerializer',
-           'current_user': 'users.serializers.CustomUserSerializer',
-       },
-       'USER_ID_FIELD': 'id',
-       'HIDE_USERS': False,
-       'PERMISSIONS': {
-           'user': ['rest_framework.permissions.IsAuthenticated'],
-           'user_list': ['rest_framework.permissions.AllowAny']
-       },
-       #'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
-   }
+    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.UserRegistrationSerializer',
+        'user': 'users.serializers.CustomUserSerializer',
+        'current_user': 'users.serializers.CustomUserSerializer',
+    },
+    'USER_ID_FIELD': 'id',
+    'HIDE_USERS': False,
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+        'user_list': ['rest_framework.permissions.AllowAny']
+    },
+}
