@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class User(AbstractUser):
@@ -30,6 +30,6 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['user', 'following'],
-                       name='unique_following')]
+                                               name='unique_following')]
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
