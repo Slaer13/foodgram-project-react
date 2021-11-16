@@ -10,14 +10,14 @@ services:
     restart: always
 
   frontend:
-    image: darkfox131/foodgram-frontend:latest
+    image: darkfox131/foodgram_frontend:latest
     volumes:
       - ./frontend/:/app/result_build/
     depends_on:
       - db
 
   backend:
-    image: darkfox131/foodgram:latest
+    image: darkfox131/foodgram-project:latest
     restart: always
     volumes:
       - static_value:/code/static/
