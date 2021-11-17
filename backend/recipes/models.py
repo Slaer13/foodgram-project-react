@@ -34,7 +34,7 @@ class Tag(models.Model):
 
     COLOR_CHOICES = [
         (ORANGE, 'Оранжевый'),
-        (RED, 'Желтый'),
+        (RED, 'Красный'),
         (GREEN, 'Зеленый'),
         (BLUE, 'Синий'),
         (PURPLE, 'Фиолетовый'),
