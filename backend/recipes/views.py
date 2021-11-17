@@ -19,7 +19,6 @@ class RetriveAndListViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet):
-    pass
 
 
 class IngredientsViewSet(RetriveAndListViewSet):

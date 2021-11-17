@@ -112,8 +112,8 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         for ingredient in ingredients:
             ingredient_id = ingredient['id']
             amount = ingredient['amount']
-            if RecipeIngredients.objects. \
-                    filter(recipe=recipe, ingredient=ingredient_id).exists():
+            if RecipeIngredients.objects.filter(
+                    recipe=recipe, ingredient=ingredient_id).exists():
                 amount += F('amount')
             RecipeIngredients.objects.update_or_create(
                 recipe=recipe, ingredient=ingredient_id,
@@ -146,9 +146,7 @@ class AddRecipeSerializer(serializers.ModelSerializer):
 
     def to_representation(self, recipe):
         data = ShowRecipeSerializer(
-            recipe,
-            context={'request': self.context.get('request')}
-        ).data
+            recipe, context={'request': self.context.get('request')}).data
         return data
 
 
