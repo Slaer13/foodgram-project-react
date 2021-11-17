@@ -27,14 +27,14 @@ class Ingredient(models.Model):
 
 class Tag(models.Model):
     ORANGE = '#FFA500'
-    YELLOW = '#FFFF00'
+    RED = '#FF0000'
     GREEN = '#008000'
     BLUE = '#0000FF'
     PURPLE = '#800080'
 
     COLOR_CHOICES = [
         (ORANGE, 'Оранжевый'),
-        (YELLOW, 'Желтый'),
+        (RED, 'Желтый'),
         (GREEN, 'Зеленый'),
         (BLUE, 'Синий'),
         (PURPLE, 'Фиолетовый'),
@@ -127,8 +127,9 @@ class Favorite(models.Model):
                                verbose_name='Рецепт')
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
-                                               name='unique_recipe_in_user_favorite')]
+        constraints = [models.UniqueConstraint(
+            fields=['user', 'recipe'],
+            name='unique_recipe_in_user_favorite')]
         ordering = ('-id',)
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
@@ -142,8 +143,9 @@ class ShoppingList(models.Model):
                                verbose_name='Рецепт')
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['user', 'recipe'],
-                                               name='unique_recipe_in_user_shopping_list')]
+        constraints = [models.UniqueConstraint(
+            fields=['user', 'recipe'],
+            name='unique_recipe_in_user_shopping_list')]
         ordering = ('-id',)
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'

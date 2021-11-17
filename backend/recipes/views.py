@@ -1,25 +1,24 @@
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from foodgram.pagination import CustomPageNumberPaginator
 from rest_framework import mixins, permissions, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from foodgram.pagination import CustomPageNumberPaginator
-
 from .filters import IngredientsFilter, RecipeFilter
 from .models import (Ingredient, RecipeIngredients, Tag,
                      Recipe, Favorite, ShoppingList)
+from .permissions import IsAuthorOrAdmin
 from .serializers import (IngredientsSerializer, TagsSerializer,
                           ShowRecipeFullSerializer, AddRecipeSerializer,
                           FavouriteSerializer, ShoppingListSerializer)
-from .permissions import IsAuthorOrAdmin
 
 
 class RetriveAndListViewSet(
-        mixins.ListModelMixin,
-        mixins.RetrieveModelMixin,
-        viewsets.GenericViewSet):
+    mixins.ListModelMixin,
+    mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet):
     pass
 
 
@@ -106,7 +105,7 @@ def get_ingredients_list(recipes_list):
                 ingredients_dict[name] = {
                     'measurement_unit': measurement_unit,
                     'amount': amount
-                    }
+                }
             else:
                 ingredients_dict[name]['amount'] += amount
     to_buy = []
