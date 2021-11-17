@@ -15,10 +15,9 @@ from .serializers import (IngredientsSerializer, TagsSerializer,
                           FavouriteSerializer, ShoppingListSerializer)
 
 
-class RetriveAndListViewSet(
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    viewsets.GenericViewSet):
+class RetriveAndListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                            viewsets.GenericViewSet):
+    pass
 
 
 class IngredientsViewSet(RetriveAndListViewSet):

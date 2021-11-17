@@ -95,7 +95,7 @@ class AddRecipeSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, data):
         ingredients = self.initial_data.get('ingredients')
-        if ingredients == []:
+        if not ingredients:
             raise ValidationError('Нужно выбрать минимум 1 ингридиент!')
         for ingredient in ingredients:
             if int(ingredient['amount']) <= 0:
@@ -145,9 +145,8 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def to_representation(self, recipe):
-        data = ShowRecipeSerializer(
+        return ShowRecipeSerializer(
             recipe, context={'request': self.context.get('request')}).data
-        return data
 
 
 class FavouriteSerializer(serializers.ModelSerializer):
