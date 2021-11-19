@@ -5,12 +5,10 @@ from django.db import models
 class User(AbstractUser):
     email = models.EmailField(max_length=150, unique=True,
                               verbose_name='Адрес электронной почты')
-    username = models.CharField(blank=False, max_length=150, unique=True,
+    username = models.CharField(max_length=150, unique=True,
                                 verbose_name='Имя пользователя')
-    first_name = models.CharField(blank=False, max_length=150,
-                                  verbose_name='Имя')
-    last_name = models.CharField(blank=False, max_length=150,
-                                 verbose_name='Фамилия')
+    first_name = models.CharField(max_length=150, verbose_name='Имя')
+    last_name = models.CharField(bmax_length=150, verbose_name='Фамилия')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']

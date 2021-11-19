@@ -14,7 +14,7 @@ services:
     volumes:
       - ./frontend/:/app/result_build/
     depends_on:
-      - db
+      - backend
 
   backend:
     image: darkfox131/foodgram-project:latest

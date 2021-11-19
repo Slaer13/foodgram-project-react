@@ -1,18 +1,19 @@
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from foodgram.pagination import CustomPageNumberPaginator
-from rest_framework import mixins, permissions, viewsets, status
+from rest_framework import mixins, permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from foodgram.pagination import CustomPageNumberPaginator
+
 from .filters import IngredientsFilter, RecipeFilter
-from .models import (Ingredient, RecipeIngredients, Tag,
-                     Recipe, Favorite, ShoppingList)
+from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                     ShoppingList, Tag)
 from .permissions import IsAuthorOrAdmin
-from .serializers import (IngredientsSerializer, TagsSerializer,
-                          ShowRecipeFullSerializer, AddRecipeSerializer,
-                          FavouriteSerializer, ShoppingListSerializer)
+from .serializers import (AddRecipeSerializer, FavouriteSerializer,
+                          IngredientsSerializer, ShoppingListSerializer,
+                          ShowRecipeFullSerializer, TagsSerializer)
 
 
 class RetriveAndListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
@@ -94,7 +95,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 def get_ingredients_list(recipes_list):
     ingredients_dict = {}
     for recipe in recipes_list:
-        ingredients = RecipeIngredients.objects.filter(recipe=recipe.recipe)
+        ingredients = RecipeIngredient.objects.filter(recipe=recipe.recipe)
         for ingredient in ingredients:
             amount = ingredient.amount
             name = ingredient.ingredient.name
