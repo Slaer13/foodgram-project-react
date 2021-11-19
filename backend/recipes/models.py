@@ -60,8 +60,8 @@ class Recipe(models.Model):
                                verbose_name='Автор')
     text = models.TextField(verbose_name='Описание')
     tags = models.ManyToManyField(Tag, through='RecipeTags')
-    ingredients = models.ManyToManyField(Ingredient,
-                                         through='recipes.models.RecipeIngredient')
+    ingredients = models.ManyToManyField(
+        Ingredient, through='recipes.models.RecipeIngredient')
     cooking_time = models.PositiveIntegerField(
         validators=[MinValueValidator(
             1, message='Минимальное время приготовления 1 минута')],
