@@ -107,7 +107,6 @@ class AddRecipeSerializer(serializers.ModelSerializer):
             ingredient_list.append(ingredient)
             if int(ingredient_item['amount']) <= 0:
                 raise ValidationError('Количество должно быть положительным!')
-        data['ingredients'] = ingredients
         return data
 
     def validate_cooking_time(self, data):
