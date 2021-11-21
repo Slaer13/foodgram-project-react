@@ -1,48 +1,27 @@
 from django.contrib import admin
 
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     RecipeTags, ShoppingList, Tag)
+from .models import ShoppingList, Favorite, Ingredient, Recipe, Tag
 
 
-@admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'slug')
+    list_display = ('name', 'slug', 'color')
 
 
-@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'measurement_unit')
-    list_filter = ['name']
-    search_fields = ('name',)
+    list_display = ('name', 'measurement_unit')
+    list_filter = ('name',)
 
 
-class RecipeIngredientsInline(admin.TabularInline):
-    model = RecipeIngredient
-    min_num = 1
-    extra = 1
-
-
-class RecipeTagsInline(admin.TabularInline):
-    model = RecipeTags
-    min_num = 1
-    extra = 0
-
-
-@admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'name', 'author', 'in_favorite')
-    list_filter = ['name', 'author', 'tags']
-    inlines = (RecipeIngredientsInline, RecipeTagsInline)
+    list_display = ('name', 'author', 'count_favorites')
+    list_filter = ('author', 'name', 'tags')
 
-    def in_favorite(self, obj):
-        return obj.in_favorite.all().count()
-
-
-@admin.register(Favorite)
-class FavoriteAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'recipe')
+    def count_favorites(self, obj):
+        return obj.favorites.count()
 
 
-@admin.register(ShoppingList)
-class ShoppingListAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'user', 'recipe')
+admin.site.register(Tag, TagAdmin)
+admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(Recipe, RecipeAdmin)
+admin.site.register(ShoppingList)
+admin.site.register(Favorite)

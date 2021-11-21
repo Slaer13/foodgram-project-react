@@ -6,7 +6,8 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=200, erbose_name='Название ингридиента')
+    name = models.CharField(max_length=200,
+                            verbose_name='Название ингридиента')
     measurement_unit = models.CharField(max_length=200,
                                         verbose_name='Мера измерения')
 
@@ -57,11 +58,11 @@ class Recipe(models.Model):
     name = models.CharField(max_length=200, verbose_name='Название')
     author = models.ForeignKey(User, on_delete=models.CASCADE,
                                related_name='recipes',
-                               verbose_name='Автор')
-    text = models.TextField(verbose_name='Описание')
-    tags = models.ManyToManyField(Tag, through='RecipeTags')
+                               verbose_name='Автор рецепта')
+    text = models.TextField(verbose_name='Описание рецепта')
+    tags = models.ManyToManyField(Tag, verbose_name='Теги',)
     ingredients = models.ManyToManyField(
-        Ingredient, through='recipes.models.RecipeIngredient')
+        Ingredient, through='RecipeIngredient')
     cooking_time = models.PositiveIntegerField(
         validators=[MinValueValidator(
             1, message='Минимальное время приготовления 1 минута')],
@@ -97,19 +98,6 @@ class RecipeIngredient(models.Model):
 
     def __str__(self):
         return 'Ингридиент в рецепте'
-
-
-class RecipeTags(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE,
-                            verbose_name='Тег')
-
-    class Meta:
-        verbose_name = 'Теги'
-        verbose_name_plural = 'Теги'
-
-    def __str__(self):
-        return 'Тег рецепта'
 
 
 class Favorite(models.Model):

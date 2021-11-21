@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db.models import F
+from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
@@ -97,9 +98,16 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         ingredients = self.initial_data.get('ingredients')
         if not ingredients:
             raise ValidationError('Нужно выбрать минимум 1 ингридиент!')
-        for ingredient in ingredients:
-            if int(ingredient['amount']) <= 0:
+        ingredient_list = []
+        for ingredient_item in ingredients:
+            ingredient = get_object_or_404(Ingredient,
+                                           id=ingredient_item['id'])
+            if ingredient in ingredient_list:
+                raise ValidationError('Ингридиенты должны быть уникальными')
+            ingredient_list.append(ingredient)
+            if int(ingredient_item['amount']) <= 0:
                 raise ValidationError('Количество должно быть положительным!')
+        data['ingredients'] = ingredients
         return data
 
     def validate_cooking_time(self, data):
@@ -129,11 +137,6 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, recipe, validated_data):
-        recipe.name = validated_data.get('name', recipe.name)
-        recipe.text = validated_data.get('text', recipe.text)
-        recipe.cooking_time = validated_data.get('cooking_time',
-                                                 recipe.cooking_time)
-        recipe.image = validated_data.get('image', recipe.image)
         if 'ingredients' in self.initial_data:
             ingredients = validated_data.pop('ingredients')
             recipe.ingredients.clear()
@@ -141,8 +144,7 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         if 'tags' in self.initial_data:
             tags_data = validated_data.pop('tags')
             recipe.tags.set(tags_data)
-        recipe.save()
-        return recipe
+        return super().update(recipe, validated_data)
 
     def to_representation(self, recipe):
         return ShowRecipeSerializer(
