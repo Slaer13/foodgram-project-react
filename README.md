@@ -30,7 +30,6 @@ sudo docker-compose exec backend python manage.py collectstatic --noinput
 ```
 #### Применитe миграции:
 ```
-sudi docker-compose exec backend python manage.py makemigrations
 sudo docker-compose exec backend python manage.py migrate --noinput
 ```
 #### Загрузите ингридиенты в базу данных (не обязательно)
