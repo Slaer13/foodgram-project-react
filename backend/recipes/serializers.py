@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.serializers import ValidationError
+
 from users.serializers import CustomUserSerializer
 
 from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
@@ -108,6 +109,17 @@ class AddRecipeSerializer(serializers.ModelSerializer):
             if int(ingredient_item['amount']) <= 0:
                 raise ValidationError('Количество должно быть положительным!')
         return data
+
+    def validate_tags(self, data):
+        tags_data = self.initial_data.get('tags')
+        tags_list = []
+        for tag_name in tags_data:
+            tag = get_object_or_404(Tag, id=tag_name['id'])
+            if tag in tags_list:
+                raise ValidationError('Тэг должен быть уникальным!')
+            tags_list.append(tag)
+        return data
+
 
     def validate_cooking_time(self, data):
         if data <= 0:
