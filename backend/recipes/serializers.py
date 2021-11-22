@@ -111,15 +111,11 @@ class AddRecipeSerializer(serializers.ModelSerializer):
         return data
 
     def validate_tags(self, data):
-        tags_data = self.initial_data.get('tags')
-        tags_list = []
-        for tag_name in tags_data:
-            tag = get_object_or_404(Tag, id=tag_name['id'])
-            if tag in tags_list:
-                raise ValidationError('Тэг должен быть уникальным!')
-            tags_list.append(tag)
+        if not data:
+            raise serializers.ValidationError('Добавьте тэг!')
+        if len(data) != len(set(data)):
+            raise serializers.ValidationError('Тэг должен быть уникальным')
         return data
-
 
     def validate_cooking_time(self, data):
         if data <= 0:
