@@ -17,6 +17,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'rest_framework.authtoken',
     'django_filters',
     'djoser',
@@ -29,6 +30,7 @@ AUTH_USER_MODEL = 'users.User'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -67,6 +69,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', default=5432)
     }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
