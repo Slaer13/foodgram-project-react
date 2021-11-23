@@ -6,15 +6,17 @@ from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from foodgram.pagination import CustomPageNumberPaginator  # noqa
+from foodgram.pagination import CustomPageNumberPaginator # noqa
 from .filters import IngredientsFilter, RecipeFilter
 from .mixins import RetriveAndListViewSet
-from .models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                     ShoppingList, Tag)
+from .models import (
+    Favorite, Ingredient, Recipe, RecipeIngredient, ShoppingList, Tag,
+)
 from .permissions import IsAuthorOrAdmin
-from .serializers import (AddRecipeSerializer, FavouriteSerializer,
-                          IngredientsSerializer, ShoppingListSerializer,
-                          ShowRecipeFullSerializer, TagsSerializer)
+from .serializers import (
+    AddRecipeSerializer, FavouriteSerializer, IngredientsSerializer,
+    ShoppingListSerializer, ShowRecipeFullSerializer, TagsSerializer,
+)
 
 
 class IngredientsViewSet(RetriveAndListViewSet):
