@@ -10,7 +10,8 @@ User = get_user_model()
 class UserAdmin(DjangoUserAdmin):
     list_display = ('pk', 'username', 'email', 'first_name',
                     'last_name', 'is_stuff')
-    list_filter = ['email', 'username']
+    list_filter = ('email', 'username')
+    empty_value_display = '-пусто-'
 
 
 admin.site.register(User, DjangoUserAdmin)
@@ -20,3 +21,5 @@ admin.site.register(User, DjangoUserAdmin)
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('pk', 'user', 'following')
     list_filter = ['user', 'following']
+    search_fields = ("user",)
+    empty_value_display = '-пусто-'
