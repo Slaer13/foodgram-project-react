@@ -72,6 +72,3 @@ DEBUG = <режим отладки> (0 или 1)
 ```
 http://darkertheblack.ru/admin/
 ```
-Вход для ознакомления:
-- логин: admin@review.ru
-- пароль: s123456r
